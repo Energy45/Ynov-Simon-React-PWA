@@ -1,32 +1,67 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
+import { useTimeout } from './utils';
+
+const SIMON_BUTTON: string[] = [
+  'yellow', 'green', 'red', 'blue'
+]
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [arrayColor, setArrayColor] = useState<string[]>();
+  const [isIaToPlay, setIsIaToPlay] = useState<boolean>(true);
+  const [sequence, setSequence] = useState<string[]>(['red', 'green']);
+  const [key, setKey] = useState<number>(0);
+
+  useEffect(() => {
+    console.log('check end', {
+      sequence,
+      key,
+      isIaToPlay,
+    })
+    if(key === sequence?.length) {
+      console.log('AH');
+      setIsIaToPlay(!isIaToPlay);
+      setKey(0);
+    }
+  }, [key, isIaToPlay]);
+
+
+  useEffect(() => {
+    console.log('increment key', {
+      sequence,
+      key,
+      isIaToPlay,
+    })
+    if(isIaToPlay) {
+      useTimeout(() => {
+        setKey(key + 1);
+      }, 1000);
+      // setTimeout(() => {
+      //   setKey(key + 1);
+      // }, 1000);
+    }
+  }, [key, isIaToPlay]);
+
+  // const handleClickSimonButtonCallback = useCallback((simonButton: ISimonButton) => {
+
+  // }, [isIaToPlay]);
+
+  const handleClickSimonButton = (color: string) => {
+    if(!isIaToPlay) {
+
+    }
+  }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container">
+      <div className="wrapper-simon">
+        {SIMON_BUTTON.map((color: string) => {
+          const hover = sequence && sequence[key] === color ? 'hover' : '';
+          return <button className={`simon-button ${color} ${hover}`} onClick={() => handleClickSimonButton(color)}>{color}</button>;
+        })}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }
