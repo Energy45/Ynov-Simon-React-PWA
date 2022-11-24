@@ -5,8 +5,16 @@
   height: 100vh;
 }
 
+.wrapper-simon {
+  width: 100%;
+  position: relative;
+  height: 100%;
+}
+
 .simon-button {
   width: calc(100% / 2);
+  position: relative;
+  height: calc(100% / 2);
 }
 
 .simon-button.red {
@@ -43,14 +51,28 @@
 }
 
 .simon-button.blue.hover{
-  opacity: 1;
+  animation: hover 2s ease-in-out 0s infinite;
 }
 .simon-button.red.hover{
-  opacity: 1;
+  animation: hover 2s ease-in-out 0s infinite;
 }
 .simon-button.green.hover{
-  opacity: 1;
+  animation: hover 2s ease-in-out 0s infinite;
 }
 .simon-button.yellow.hover{
-  opacity: 1;
+  animation: hover 2s ease-in-out 0s infinite;
+}
+
+@keyframes hover {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
 }

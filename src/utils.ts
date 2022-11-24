@@ -24,3 +24,8 @@ export function useTimeout(callback: () => void, delay: number | null) {
     return () => clearTimeout(id)
   }, [delay])
 }
+
+export function getRandomInt(max: number) {
+    return Math.floor(Math.random() * max);
+  }
+  

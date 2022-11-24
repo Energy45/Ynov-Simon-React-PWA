@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
-import { useTimeout } from './utils';
+import { getRandomInt, useTimeout } from './utils';
+import { pwa } from "pwafire";
 
 const SIMON_BUTTON: string[] = [
   'yellow', 'green', 'red', 'blue'
@@ -21,9 +22,18 @@ function App() {
       isIaToPlay,
     })
     if(key === sequence?.length) {
-      console.log('AH');
       setIsIaToPlay(!isIaToPlay);
       setKey(0);
+      if(!isIaToPlay) {
+        setSequence([...sequence, SIMON_BUTTON[getRandomInt(4)]])
+      } else {
+        pwa.Notification({
+          title: 'Simon say',
+          options: {
+            body: "It's your turn !",
+          },
+        });
+      }
     }
   }, [key, isIaToPlay]);
 
@@ -34,32 +44,51 @@ function App() {
       key,
       isIaToPlay,
     })
+    let timeout: NodeJS.Timeout;
     if(isIaToPlay) {
-      useTimeout(() => {
-        setKey(key + 1);
-      }, 1000);
-      // setTimeout(() => {
+      // useTimeout(() => {
       //   setKey(key + 1);
       // }, 1000);
+      timeout = setTimeout(() => {
+        setKey(key + 1);
+      }, 2000);
     }
+    return () => timeout && clearTimeout(timeout);
   }, [key, isIaToPlay]);
+
+  useEffect(() => {
+    if(!isIaToPlay) {
+
+    } else {
+
+    }
+  }, [isIaToPlay])
 
   // const handleClickSimonButtonCallback = useCallback((simonButton: ISimonButton) => {
 
   // }, [isIaToPlay]);
 
-  const handleClickSimonButton = (color: string) => {
+  const handleClickSimonButton = useCallback((color: string) => {
     if(!isIaToPlay) {
-
+      if(sequence[key] === color) {
+        setKey(key + 1);
+      } else {
+        pwa.Notification({
+          title: 'Simon say',
+          options: {
+            body: "Looser",
+          },
+        })
+      }
     }
-  }
+  }, [key, isIaToPlay, sequence]);
 
   return (
     <div className="container">
       <div className="wrapper-simon">
-        {SIMON_BUTTON.map((color: string) => {
-          const hover = sequence && sequence[key] === color ? 'hover' : '';
-          return <button className={`simon-button ${color} ${hover}`} onClick={() => handleClickSimonButton(color)}>{color}</button>;
+        {SIMON_BUTTON.map((color: string, index: number) => {
+          const hover = isIaToPlay && sequence && sequence[key] === color ? 'hover' : '';
+          return <button key={index} className={`simon-button ${color} ${hover}`} onClick={() => handleClickSimonButton(color)}>{color}</button>;
         })}
       </div>
     </div>
