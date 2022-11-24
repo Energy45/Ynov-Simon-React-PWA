@@ -8,34 +8,28 @@ export default defineConfig({
     react(),
     VitePWA({ 
       registerType: 'autoUpdate',
-      injectRegister: 'auto',
       devOptions: {
         enabled: true
       },
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Simon',
-        short_name: 'vite-react-ts-100',
-        start_url: '/',
-        display: 'standalone',
-        background_color: '#ffffff',
-        lang: 'en',
-        scope: '/',
+        name: 'My Awesome App',
+        short_name: 'MyApp',
+        description: 'My Awesome App description',
+        theme_color: '#ffffff',
         icons: [
-            {
-              src: '/android-chrome-192x192.png',
-              sizes: '192x192',
-              type: 'image/png',
-              purpose: 'any maskable',
-            },
-            {
-              src: '/android-chrome-512x512.png',
-              sizes: '512x512',
-              type: 'image/png',
-              purpose: 'any maskable',
-            },
-          ],
-          theme_color: '#ffffff',
-        },
+          {
+            src: 'android-chrome-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'android-chrome-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
+        ]
+      }
     }),
   ]
 })
