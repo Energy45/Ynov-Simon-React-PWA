@@ -50,16 +50,16 @@
   opacity: 0.5;
 }
 
-.simon-button.blue:hover{
+.simon-button.blue:active{
   opacity: 1;
 }
-.simon-button.red:hover{
+.simon-button.red:active{
   opacity: 1;
 }
-.simon-button.green:hover{
+.simon-button.green:active{
   opacity: 1;
 }
-.simon-button.yellow:hover{
+.simon-button.yellow:active{
   opacity: 1;
 }
 
