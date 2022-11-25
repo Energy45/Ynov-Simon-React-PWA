@@ -10,21 +10,17 @@ const SIMON_BUTTON: string[] = [
 
 function App() {
 
-  const [arrayColor, setArrayColor] = useState<string[]>();
+  const [score, setScore] = useState<number>(0);
   const [isIaToPlay, setIsIaToPlay] = useState<boolean>(true);
   const [sequence, setSequence] = useState<string[]>(['red', 'green']);
   const [key, setKey] = useState<number>(0);
 
   useEffect(() => {
-    console.log('check end', {
-      sequence,
-      key,
-      isIaToPlay,
-    })
     if(key === sequence?.length) {
       setIsIaToPlay(!isIaToPlay);
       setKey(0);
       if(!isIaToPlay) {
+        setScore(score + 1);
         setSequence([...sequence, SIMON_BUTTON[getRandomInt(4)]])
       } else {
         pwa.Notification({
@@ -39,16 +35,8 @@ function App() {
 
 
   useEffect(() => {
-    console.log('increment key', {
-      sequence,
-      key,
-      isIaToPlay,
-    })
     let timeout: NodeJS.Timeout;
     if(isIaToPlay) {
-      // useTimeout(() => {
-      //   setKey(key + 1);
-      // }, 1000);
       timeout = setTimeout(() => {
         setKey(key + 1);
       }, 2000);
@@ -62,11 +50,7 @@ function App() {
     } else {
 
     }
-  }, [isIaToPlay])
-
-  // const handleClickSimonButtonCallback = useCallback((simonButton: ISimonButton) => {
-
-  // }, [isIaToPlay]);
+  }, [isIaToPlay]);
 
   const handleClickSimonButton = useCallback((color: string) => {
     if(!isIaToPlay) {
@@ -85,12 +69,11 @@ function App() {
 
   return (
     <div className="container">
-      <div className="wrapper-simon">
-        {SIMON_BUTTON.map((color: string, index: number) => {
-          const hover = isIaToPlay && sequence && sequence[key] === color ? 'hover' : '';
-          return <button key={index} className={`simon-button ${color} ${hover}`} onClick={() => handleClickSimonButton(color)}>{color}</button>;
-        })}
-      </div>
+      <p className="score">{`Score : ${score}`}</p>
+      {SIMON_BUTTON.map((color: string, index: number) => {
+        const hover = isIaToPlay && sequence && sequence[key] === color ? 'hover' : '';
+        return <button key={index} className={`simon-button ${color} ${hover}`} onClick={() => handleClickSimonButton(color)}>{color}</button>;
+      })}
     </div>
   )
 }
